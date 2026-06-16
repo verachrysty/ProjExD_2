@@ -52,6 +52,25 @@ def init_bb_imgs() -> tuple[list[pg.Surface], list[int]]:
     return bb_imgs, bb_accs
 
 
+def get_kk_imgs() -> dict[tuple[int, int], pg.Surface]:
+    base_img = pg.image.load("fig/3.png")
+    kk_left = pg.transform.rotozoom(base_img, 0, 0.9)
+    kk_right = pg.transform.flip(kk_left, True, False)
+    
+    kk_dict = {
+        (0, 0): kk_left,
+        (-5, 0): kk_left,
+        (-5, -5): pg.transform.rotozoom(kk_left, -45, 1.0),
+        (0, -5): pg.transform.rotozoom(kk_right, 90, 1.0),
+        (+5, -5): pg.transform.rotozoom(kk_right, 45, 1.0),
+        (+5, 0): kk_right,
+        (+5, +5): pg.transform.rotozoom(kk_right, -45, 1.0),
+        (0, +5): pg.transform.rotozoom(kk_right, -90, 1.0),
+        (-5, +5): pg.transform.rotozoom(kk_left, 45, 1.0),
+    }
+    return kk_dict
+
+
 def check_bound(rct: pg.Rect) -> tuple[bool, bool]:
     """
     引数：こうかとんRect or 爆弾Rect
@@ -69,10 +88,13 @@ def check_bound(rct: pg.Rect) -> tuple[bool, bool]:
 def main():
     pg.display.set_caption("逃げろ！こうかとん")
     screen = pg.display.set_mode((WIDTH, HEIGHT))
-    bg_img = pg.image.load("fig/pg_bg.jpg")    
-    kk_img = pg.transform.rotozoom(pg.image.load("fig/3.png"), 0, 0.9)
+    bg_img = pg.image.load("fig/pg_bg.jpg") 
+    kk_imgs = get_kk_imgs()
+    kk_img = kk_imgs[(0, 0)]
     kk_rct = kk_img.get_rect()
     kk_rct.center = 300, 200
+
+
 
     bb_img= pg.Surface((20,20))
     bb_img.set_colorkey((0,0,0))
@@ -107,9 +129,8 @@ def main():
             if key_lst[key]:
                 sum_mv[0] += mv[0]  
                 sum_mv[1] += mv[1] 
-         
-
         kk_rct.move_ip(sum_mv)
+        kk_img = kk_imgs[tuple(sum_mv)]
         if check_bound(kk_rct) != (True, True):
             kk_rct.move_ip(-sum_mv[0], -sum_mv[1]) 
         screen.blit(kk_img, kk_rct)
