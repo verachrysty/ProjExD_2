@@ -2,6 +2,7 @@ import os
 import sys
 import time 
 import random 
+import math
 import pygame as pg
 
 
@@ -69,6 +70,18 @@ def get_kk_imgs() -> dict[tuple[int, int], pg.Surface]:
         (-5, +5): pg.transform.rotozoom(kk_left, 45, 1.0),
     }
     return kk_dict
+#exercice 4
+def calc_orientation(org: pg.Rect, dst: pg.Rect, current_xy: tuple[float, float]) -> tuple[float, float]:
+   
+    dx = dst.centerx - org.centerx
+    dy = dst.centery - org.centery
+    dist = math.sqrt(dx**2 + dy**2)
+    if dist < 300:
+        return current_xy
+    norm = math.sqrt(50)
+    vx = (dx / dist) * norm
+    vy = (dy / dist) * norm
+    return vx, vy
 
 
 def check_bound(rct: pg.Rect) -> tuple[bool, bool]:
@@ -134,6 +147,8 @@ def main():
         if check_bound(kk_rct) != (True, True):
             kk_rct.move_ip(-sum_mv[0], -sum_mv[1]) 
         screen.blit(kk_img, kk_rct)
+
+        vx,vy= calc_orientation(bb_rct, kk_rct, (vx, vy))
         
         idx= min(tmr // 500, 9)
         bb_img = bb_imgs[idx]
