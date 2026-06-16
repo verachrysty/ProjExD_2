@@ -54,8 +54,8 @@ def init_bb_imgs() -> tuple[list[pg.Surface], list[int]]:
 
 
 def get_kk_imgs() -> dict[tuple[int, int], pg.Surface]:
-    base_img = pg.image.load("fig/3.png")
-    kk_left = pg.transform.rotozoom(base_img, 0, 0.9)
+    base_img = pg.image.load("fig/3.png")  
+    kk_left = pg.transform.rotozoom(base_img, 0, 0.9)  
     kk_right = pg.transform.flip(kk_left, True, False)
     
     kk_dict = {
