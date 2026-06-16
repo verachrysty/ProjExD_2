@@ -72,6 +72,9 @@ def get_kk_imgs() -> dict[tuple[int, int], pg.Surface]:
     return kk_dict
 #exercice 4
 def calc_orientation(org: pg.Rect, dst: pg.Rect, current_xy: tuple[float, float]) -> tuple[float, float]:
+    """
+    引数のこうかとんのRectと爆弾のRectから、爆弾の次の移動速度ベクトルを計算する関数
+    """
    
     dx = dst.centerx - org.centerx
     dy = dst.centery - org.centery
